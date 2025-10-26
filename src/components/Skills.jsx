@@ -4,7 +4,7 @@ import { requestStates } from '../constants';
 import { useSkills } from '../customHooks/useSkills';
 
 export const Skills = () => {
-const [sortedLanguageList, fetchRequestState, converseCountToPercentage] = useSkills();
+const [sortedLanguageList, fetchRequestState, convertCountToPercentage] = useSkills();
 
    return (
     <div id="skills">
@@ -23,7 +23,7 @@ const [sortedLanguageList, fetchRequestState, converseCountToPercentage] = useSk
               sortedLanguageList().map((item, index) => (
                 <div className="skill-item" key={index}>
                   <p className="description"><strong>{item.language}</strong></p>
-                  <CircularProgressbar value={converseCountToPercentage(item.count)} text={`${converseCountToPercentage(item.count)}%`} />
+                  <CircularProgressbar value={convertCountToPercentage(item.count)} text={`${convertCountToPercentage(item.count)}%`} />
                 </div>
               ))
             )
