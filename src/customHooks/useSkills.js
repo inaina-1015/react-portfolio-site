@@ -6,17 +6,21 @@ import { skillReducer, initialState, actionTypes } from '../reducers/skillReduce
 export const useSkills = () => {
   const [state, dispatch] = useReducer(skillReducer, initialState);
 
-  useEffect(() => {
-    dispatch({ type: actionTypes.fetch });
-    axios.get('https://api.github.com/users/USER_NAME/repos')
-      .then((response) => {
-        const languageList = response.data.map(res => res.language)
-        const countedLanguageList = generateLanguageCountObj(languageList)
-        dispatch({ type: actionTypes.success, payload: { languageList: countedLanguageList } });
-      })
-      .catch(() => {
-        dispatch({ type: actionTypes.error });
-      });
+ const fetchReposApi = () => {
+   dispatch({ type: actionTypes.fetch });
+   axios.get('https://api.github.com/users/inaina-1015/repos')
+     .then((response) => {
+       const languageList = response.data.map(res => res.language)
+       const countedLanguageList = generateLanguageCountObj(languageList)
+       dispatch({ type: actionTypes.success, payload: {languageList: countedLanguageList } });
+     })
+     .catch(() => {
+       dispatch({ type: actionTypes.error });
+     });
+ }
+
+useEffect(() => {
+   fetchReposApi();
    }, []);
 
   const generateLanguageCountObj = (allLanguageList) => {
@@ -30,14 +34,16 @@ export const useSkills = () => {
       }
     });
   };
+ const DEFAULT_MAX_PERCENTAGE = 100;
+ const LANGUAGE_COUNT_BASE = 10;
 
-  const converseCountToPercentage = (count) => {
-    if (count > 10) { return 100; }
-    return count * 10;
+ const convertCountToPercentage = (languageCount) => {
+    if (languageCount > LANGUAGE_COUNT_BASE) { return DEFAULT_MAX_PERCENTAGE; }
+   return languageCount * LANGUAGE_COUNT_BASE;
   };
 
   const sortedLanguageList = () => (
     state.languageList.sort((firstLang, nextLang) =>  nextLang.count - firstLang.count)
   )
-    return [sortedLanguageList, state.requestState, converseCountToPercentage];
+    return [sortedLanguageList, state.requestState, convertCountToPercentage];
 }

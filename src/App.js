@@ -15,10 +15,4 @@ function App() {
   );
 }
 
-class Question {
-  render() {
-    return <h3> Lets go for a <FaBeer />? </h3>
-  }
-}
-
 export default App;
